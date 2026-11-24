@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atualização de Terminal Futura</title>
+<style>
+  :root{--bg:#f6f6f4;--card:#fff;--ink:#16181c;--mut:#5b616b;--line:#d9dbe0;--acc:#1f5fd6;--ok:#16884a;--warn:#b3261e;--tip:#8a5a00}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:860px;margin:0 auto;padding:16px}
+  h1{font-size:26px;margin:8px 0 4px}
+  h2{font-size:20px;margin:0 0 12px}
+  .sub{color:var(--mut);margin:0 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  label.f{display:flex;flex-direction:column;font-size:14px;color:var(--mut);flex:1;min-width:200px}
+  input[type=text]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-top:4px}
+  button{font:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:8px;padding:10px 14px}
+  button.pri{background:var(--acc);color:#fff;border-color:var(--acc)}
+  button.big{flex:1;min-width:220px;text-align:left;padding:14px}
+  button.big b{display:block;font-size:17px}
+  button.big span{color:inherit;opacity:.8;font-size:14px}
+  .step{border-left:4px solid var(--line);padding:12px 14px;margin:0 0 12px;background:var(--card);border-radius:0 10px 10px 0;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .step.done{border-left-color:var(--ok);opacity:.7}
+  .step h3{margin:0 0 8px;font-size:17px;display:flex;gap:10px;align-items:center}
+  .step h3 input{width:22px;height:22px;flex:none}
+  .step ol,.step ul{margin:6px 0;padding-left:22px}
+  .step li{margin:4px 0}
+  code{background:#eef0f4;padding:2px 6px;border-radius:4px;font-size:15px}
+  .cmd{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
+  .cmd code{font-size:16px}
+  .cmd button{padding:4px 10px;font-size:14px}
+  .warn{border:1px solid #f0c2bf;background:#fdf1f0;color:var(--warn);padding:10px 12px;border-radius:8px;margin:8px 0}
+  .tip{border:1px solid #ecd9a8;background:#fdf7e6;color:var(--tip);padding:10px 12px;border-radius:8px;margin:8px 0}
+  details{margin:8px 0}
+  summary{cursor:pointer;color:var(--acc)}
+  figure{margin:8px 0}
+  figure img{max-width:100%;border:1px solid var(--line);border-radius:6px;display:block}
+  figcaption{font-size:13px;color:var(--mut)}
+  .bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0 14px}
+  .bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .2s}
+  .hidden{display:none}
+  .res{padding:10px 12px;border-radius:8px;margin:8px 0;font-weight:600}
+  .res.ok{background:#e8f6ee;color:var(--ok)}
+  .res.bad{background:#fdf1f0;color:var(--warn)}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  footer{color:var(--mut);font-size:13px;margin:20px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Atualização de Terminal: Futura Server e PDV</h1>
+  <p class="sub">Depois de atualizar o servidor, deixe os terminais do cliente na mesma versão. Siga as etapas e marque cada uma.</p>
+
+  <div class="card">
+    <h2>1. Dados do servidor do cliente</h2>
+    <div class="row">
+      <label class="f">Nome do servidor<input type="text" id="srv" value="SERVIDOR-TELECELL"></label>
+      <label class="f">IP do servidor<input type="text" id="ip" value="192.168.1.31"></label>
+    </div>
+    <p class="sub" style="margin:8px 0 0">Os caminhos abaixo mudam sozinhos conforme você digita.</p>
+  </div>
+
+  <div class="card">
+    <h2>2. Antes de começar</h2>
+    <ul>
+      <li>Confirme que a atualização <b>terminou no servidor</b>.</li>
+      <li><b>Feche o FuturaServer e o PDV</b> no terminal. Com o sistema aberto, o Windows não deixa trocar os arquivos.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>3. Qual é o tipo do terminal?</h2>
+    <p>No terminal, clique com o botão direito no atalho do <b>FuturaServer → Propriedades</b> e olhe o campo <b>Destino</b>:</p>
+    <div class="row">
+      <button class="big" data-tipo="A"><b>Começa com C:\FUTURA\…</b><span>Terminal local (troca DLLs, executáveis, instala.bat e atalhos)</span></button>
+      <button class="big" data-tipo="B"><b>Começa com \\<span class="v-srv">SERVIDOR-TELECELL</span> ou com o IP</b><span>Terminal via rede (só refazer os atalhos)</span></button>
+    </div>
+  </div>
+
+  <!-- PARTE A -->
+  <section id="A" class="hidden">
+    <div class="top"><h2>Parte A: terminal local</h2><button data-reset>Recomeçar</button></div>
+    <div class="bar"><i></i></div>
+
+    <div class="step">
+      <h3><input type="checkbox"> Passo 1: baixar as DLLs do Repositório</h3>
+      <p>No navegador do terminal, acesse <a href="https://repositorio.futurasistemas.com.br" target="_blank" rel="noopener">repositorio.futurasistemas.com.br</a> e faça login. Depois:</p>
+      <ol>
+        <li>Pasta <b>01 - DLLs Sistema</b></li>
+        <li>Pasta <b>atual</b></li>
+        <li>Pasta <b>32</b></li>
+        <li>Clique em <b>DLLx86.zip</b> (vai para a pasta Downloads)</li>
+      </ol>
+      <div class="tip">Se o navegador oferecer salvar a senha do repositório, clique em <b>Agora não</b>.</div>
+      <details><summary>Ver imagens</summary>
+        <figure><img src="img/p3-1.jpg" alt="Pasta 01 - DLLs Sistema" loading="lazy"><figcaption>Pasta 01 - DLLs Sistema</figcaption></figure>
+        <figure><img src="img/p3-2.jpg" alt="Pasta atual" loading="lazy"><figcaption>Pasta atual</figcaption></figure>
+        <figure><img src="img/p3-3.jpg" alt="Pasta 32" loading="lazy"><figcaption>Pasta 32</figcaption></figure>
+        <figure><img src="img/p4-1.jpg" alt="Arquivo DLLx86.zip" loading="lazy"><figcaption>Arquivo DLLx86.zip</figcaption></figure>
+      </details>
+    </div>
+
+    <div class="step">
+      <h3><input type="checkbox"> Passo 2: trocar as DLLs em C:\FUTURA</h3>
+      <ol>
+        <li>Em <b>Downloads</b>, copie o <b>DLLx86.zip</b> (Ctrl + C).</li>
+        <li>Cole em <code>C:\FUTURA\dll</code> (Ctrl + V). Se já existir um antigo, <b>Substituir</b>. Se a pasta dll não existir, crie (botão direito → Novo → Pasta).</li>
+        <li>Botão direito no zip → <b>Extrair Tudo…</b> → extraia em <code>C:\FUTURA</code>.<br><small>Alternativa: extraia em C:\FUTURA\dll e depois copie tudo para C:\FUTURA.</small></li>
+        <li>Arquivos que já existem: <b>Substituir</b> (marque <i>Fazer isso para todos</i>).</li>
+        <li>Se disser que não conseguiu extrair alguns: marque <i>Fazer isso para todos</i> e clique em <b>Ignorar</b>.</li>
+      </ol>
+      <details><summary>Ver imagens</summary>
+        <figure><img src="img/p5-1.jpg" alt="DLLx86.zip colado em C:\FUTURA\dll" loading="lazy"><figcaption>DLLx86.zip colado em C:\FUTURA\dll</figcaption></figure>
+        <figure><img src="img/p5-2.jpg" alt="Extração em andamento" loading="lazy"><figcaption>Extração em andamento</figcaption></figure>
+      </details>
+    </div>
+
+    <div class="step">
+      <h3><input type="checkbox"> Passo 3: copiar os executáveis do servidor</h3>
+      <p>Aperte <b>Windows + R</b>, cole o caminho e clique em OK (se não abrir pelo nome, use o IP):</p>
+      <div class="cmd"><code class="p-nome"></code><button data-copy="p-nome">Copiar</button></div>
+      <div class="cmd"><code class="p-ip"></code><button data-copy="p-ip">Copiar</button></div>
+      <p>Selecione <b>só estes 3</b> (segure Ctrl): <b>FuturaServer</b>, <b>FuturaUtil</b>, <b>PDV</b>. Copie, entre em <code>C:\FUTURA</code>, cole e escolha <b>Substituir</b>.</p>
+      <div class="warn"><b>Não copie o Futura.ini.</b> É ele que faz o terminal apontar para o servidor. Se for substituído, o terminal pode parar de conectar.</div>
+      <details><summary>Ver imagem</summary>
+        <figure><img src="img/p6-1.jpg" alt="Executáveis a copiar" loading="lazy"><figcaption>Verde: os 3 executáveis. Vermelho: Futura.ini, que NÃO deve ser copiado.</figcaption></figure>
+      </details>
+    </div>
+
+    <div class="step">
+      <h3><input type="checkbox"> Passo 4: executar o instala.bat</h3>
+      <p>Em <code>C:\FUTURA</code>, botão direito no <b>instala</b> (Arquivo em Lotes) → <b>Executar como administrador</b>. Se aparecer "O fornecedor não pôde ser verificado", clique em <b>Executar</b>. Espere terminar e confirme com OK as mensagens de registro.</p>
+      <div class="warn">Erro de <b>acesso negado</b> ou falha no <b>regsvr32</b> = não rodou como administrador. Feche e rode de novo com botão direito → Executar como administrador.</div>
+      <details><summary>Ver imagens</summary>
+        <figure><img src="img/p7-1.jpg" alt="Aviso de segurança" loading="lazy"><figcaption>Aviso de segurança ao executar</figcaption></figure>
+        <figure><img src="img/p7-2.jpg" alt="instala.bat em execução" loading="lazy"><figcaption>instala.bat em execução</figcaption></figure>
+      </details>
+    </div>
+
+    <div class="step">
+      <h3><input type="checkbox"> Passo 5: refazer os atalhos</h3>
+      <ol>
+        <li>Na área de trabalho, apague os atalhos antigos do <b>FuturaServer</b> e do <b>PDV</b> (tecla Delete). Só apaga o atalho, não o programa.</li>
+        <li>Em <code>C:\FUTURA</code>, selecione <b>FuturaServer</b> e <b>PDV</b> (com Ctrl).</li>
+        <li>Botão direito → <b>Enviar para → Área de trabalho (criar atalho)</b>.</li>
+      </ol>
+      <details><summary>Ver imagem</summary>
+        <figure><img src="img/p8-1.jpg" alt="Criando os atalhos" loading="lazy"><figcaption>Criando os novos atalhos</figcaption></figure>
+      </details>
+    </div>
+
+    <div class="step teste">
+      <h3><input type="checkbox"> Passo 6: testar</h3>
+      <p>Abra o novo atalho do <b>FuturaServer</b>. Na tela de login, digite qualquer coisa no usuário e na senha e clique em <b>Confirmar</b>. Faça o mesmo no <b>PDV</b>. O que apareceu?</p>
+      <div class="row">
+        <button data-res="ok">"Usuário e senha inválidos"</button>
+        <button data-res="bad">Outro erro</button>
+      </div>
+      <div class="res ok hidden">Deu certo. Terminal atualizado.</div>
+      <div class="res bad hidden">Algo deu errado. Revise os passos 2, 3 e 4 (DLLs extraídas em C:\FUTURA, 3 executáveis copiados, instala.bat como administrador).</div>
+      <details><summary>Ver imagem</summary>
+        <figure><img src="img/p8-2.jpg" alt="Tela de login" loading="lazy"><figcaption>Tela de login do Futura Server</figcaption></figure>
+      </details>
+    </div>
+  </section>
+
+  <!-- PARTE B -->
+  <section id="B" class="hidden">
+    <div class="top"><h2>Parte B: terminal via rede</h2><button data-reset>Recomeçar</button></div>
+    <div class="bar"><i></i></div>
+    <p>Aqui não se copia nenhum arquivo: os executáveis já foram atualizados no servidor. Só refaça os atalhos.</p>
+
+    <div class="step">
+      <h3><input type="checkbox"> Passo 1: apagar os atalhos antigos</h3>
+      <p>Na área de trabalho, apague os atalhos do <b>FuturaServer</b> e do <b>PDV</b> (tecla Delete).</p>
+    </div>
+
+    <div class="step">
+      <h3><input type="checkbox"> Passo 2: abrir a pasta Futura do servidor</h3>
+      <p>Aperte <b>Windows + R</b>, cole o caminho e clique em OK (se não abrir pelo nome, use o IP):</p>
+      <div class="cmd"><code class="p-nome"></code><button data-copy="p-nome">Copiar</button></div>
+      <div class="cmd"><code class="p-ip"></code><button data-copy="p-ip">Copiar</button></div>
+    </div>
+
+    <div class="step">
+      <h3><input type="checkbox"> Passo 3: criar os novos atalhos</h3>
+      <ol>
+        <li>Na pasta do servidor, selecione <b>FuturaServer</b> e <b>PDV</b> (com Ctrl).</li>
+        <li>Botão direito → <b>Enviar para → Área de trabalho (criar atalho)</b>.</li>
+        <li>Os atalhos aparecem na área de trabalho do terminal, apontando para o servidor.</li>
+      </ol>
+      <details><summary>Ver imagem</summary>
+        <figure><img src="img/p9-1.jpg" alt="FuturaServer e PDV na pasta do servidor" loading="lazy"><figcaption>FuturaServer e PDV na pasta Futura do servidor</figcaption></figure>
+      </details>
+    </div>
+
+    <div class="step teste">
+      <h3><input type="checkbox"> Passo 4: testar</h3>
+      <p>Abra o atalho, digite qualquer coisa no usuário e na senha e confirme. O que apareceu?</p>
+      <div class="row">
+        <button data-res="ok">"Usuário e senha inválidos"</button>
+        <button data-res="bad">Outro erro / não abriu</button>
+      </div>
+      <div class="res ok hidden">Deu certo. Terminal atualizado.</div>
+      <div class="res bad hidden">Algo deu errado. Confira se o terminal ainda acessa a pasta do servidor (Windows + R → <code class="p-nome"></code>) e faça um ping no servidor: <code class="p-ping"></code> <button data-copy="p-ping">Copiar</button></div>
+    </div>
+  </section>
+
+  <footer>Baseado no "Manual de Procedimento: Atualização de Terminal Futura Server e PDV", Futura Sistemas · Suporte Técnico, elaborado por Abner Gardino dos Santos, novembro de 2026.</footer>
+</div>
+
+<script>
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const srv = $('#srv'), ip = $('#ip');
+  try { srv.value = localStorage.getItem('fut-srv') || srv.value; ip.value = localStorage.getItem('fut-ip') || ip.value; } catch (e) {}
+
+  function paths() {
+    const n = srv.value.trim() || 'SERVIDOR', i = ip.value.trim() || 'IP';
+    $$('.p-nome').forEach(e => e.textContent = '\\\\' + n + '\\Futura');
+    $$('.p-ip').forEach(e => e.textContent = '\\\\' + i + '\\Futura');
+    $$('.p-ping').forEach(e => e.textContent = 'ping ' + i);
+    $$('.v-srv').forEach(e => e.textContent = n);
+    try { localStorage.setItem('fut-srv', srv.value); localStorage.setItem('fut-ip', ip.value); } catch (e) {}
+  }
+  srv.oninput = ip.oninput = paths; paths();
+
+  function show(t) {
+    $$('section').forEach(s => s.classList.toggle('hidden', s.id !== t));
+    $('#' + t).scrollIntoView({ behavior: 'smooth' });
+  }
+  $$('[data-tipo]').forEach(b => b.onclick = () => show(b.dataset.tipo));
+
+  function progress(sec) {
+    const c = $$('.step input', sec), d = c.filter(x => x.checked).length;
+    $('.bar i', sec).style.width = (d / c.length * 100) + '%';
+  }
+  $$('.step input').forEach(cb => cb.onchange = () => {
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    progress(cb.closest('section'));
+  });
+
+  $$('[data-res]').forEach(b => b.onclick = () => {
+    const st = b.closest('.step');
+    $$('.res', st).forEach(r => r.classList.add('hidden'));
+    $('.res.' + b.dataset.res, st).classList.remove('hidden');
+    if (b.dataset.res === 'ok') { const cb = $('input', st); cb.checked = true; cb.onchange(); }
+  });
+
+  $$('[data-reset]').forEach(b => b.onclick = () => {
+    const sec = b.closest('section');
+    $$('.step input', sec).forEach(c => { c.checked = false; c.closest('.step').classList.remove('done'); });
+    $$('.res', sec).forEach(r => r.classList.add('hidden'));
+    progress(sec);
+  });
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-copy]'); if (!b) return;
+    const txt = $('.' + b.dataset.copy, b.parentElement)?.textContent || $('.' + b.dataset.copy).textContent;
+    navigator.clipboard.writeText(txt).then(() => { const o = b.textContent; b.textContent = 'Copiado'; setTimeout(() => b.textContent = o, 1200); });
+  });
+</script>
+</body>
+</html>
